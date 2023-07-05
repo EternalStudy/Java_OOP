@@ -1,111 +1,64 @@
 package Home_work;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FamilyTree {
-    private long humansId;
-    private List<Human> humanList;
+public class FamilyTree implements Serializable {
+    private List<Human> humans;
+    private List<Married> marrieds;
+    private int idMarriage=0;
 
-    public FamilyTree(List<Human> humanList) {
-        this.humanList = humanList;
+    public FamilyTree(){
+        humans = new ArrayList<>();
+        marrieds = new ArrayList<>();
     }
 
-    public FamilyTree() {
-        this(new ArrayList<>());
+    public void addHuman(Human h){
+        humans.add(h);
     }
 
-    public boolean add(Human human) {
-        if (human == null) {
-            return false;
-        }
-        if (!humanList.contains(human)) {
-            humanList.add(human);
-            human.setId(humansId++);
-            addToParents(human);
-            addToChildren(human);
-            return true;
-        }
-        return false;
-    }
-    // Поиск братьев
-
-    private void addToParents(Human human) {
-        for (Human parent : human.getParents()) {
-            parent.addChild(human);
-        }
+    // При нарушении условий заключения брака возвращаем null
+    public Married addMarried(LocalDate startDate, Human wife, Human husband){
+        Married marriage = new Married(idMarriage, startDate, wife, husband);
+        if(marriage.getIsError()) return null;
+        marrieds.add(marriage);
+        idMarriage++;
+        return marriage;
     }
 
-    private void addToChildren(Human human) {
-        for (Human child : human.getChildren()) {
-            child.addParent(human);
-        }
+    public String getInfoMembers(){
+        List<String> familyMembers = new ArrayList<>();
+        for (Human h : humans)
+            familyMembers.add(h.getInfo());
+        return String.join("\n", familyMembers);
     }
 
-    public List<Human> getByName(String name) {
-        List<Human> res = new ArrayList<>();
-        for (Human human : humanList) {
-            if (human.getName().equalsIgnoreCase(name)) {
-                res.add(human);
-            }
-        }
-        return res;
+    public String getInfoMarrieds(){
+        List<String> strings = new ArrayList<>();
+        for (Married m : marrieds)
+            strings.add(m.getInfo());
+        return String.join("\n", strings);
     }
 
-    public boolean setWedding(long humanId1, long humanId2) {
-        if (checkId(humanId1) && checkId(humanId2)) {
-            Human human1 = getById(humanId1);
-            Human human2 = getById(humanId2);
-            if (human1.getSpouse() == null && human2.getSpouse() == null) {
-                human1.setSpouse(human2);
-                human2.setSpouse(human1);
-            } else {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    //Реализовать метод развода
-    {}
-    //Реализовать метод удаления после развода
-    {}
-
-    private boolean checkId(long id){
-        if(id >=humansId || id<0){
-            return false;
-        }
-        for (Human human: humanList){
-            if(human.getId() == id){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Human getById(long id){
-        for(Human human: humanList){
-            if(human.getId() == id){
-                return human;
-            }
-        }
+    public Human getHumanById(int id){
+        for(Human h : humans)
+            if(h.getId() == id)
+                return h;
         return null;
     }
-    public String getInfo(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("В дереве ");
-        sb.append(humanList.size());
-        sb.append("объектов: \n");
-        for (Human human: humanList){
-            sb.append(human);
-            sb.append("\n");
-        }
-        return sb.toString();
+
+    public String getInfoAll(){
+        return "{ members: \n"
+                + getInfoMembers()
+                + ",\nmarrieds: \n"
+                + getInfoMarrieds()
+                + "\n}";
     }
 
     @Override
-    public String toString(){
-        return getInfo();
+    public String toString() {
+        return getInfoAll();
     }
 }
-
