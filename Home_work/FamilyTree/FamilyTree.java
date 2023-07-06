@@ -1,4 +1,4 @@
-package Home_work;
+package Home_work.FamilyTree;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -61,4 +61,5 @@ public class FamilyTree implements Serializable {
     public String toString() {
         return getInfoAll();
     }
+    
 }

@@ -1,4 +1,4 @@
-package Home_work;
+package Home_work.FamilyTree;
 
 import java.io.Serializable;
 import java.time.LocalDate;

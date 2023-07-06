@@ -1,4 +1,4 @@
-package Home_work;
+package Home_work.FamilyTree;
 
 public enum Gender {
     Male, Female

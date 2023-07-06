@@ -1,9 +1,10 @@
-package Home_work;
+package Home_work.FamilyTree;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
+
 
 public class Human implements Serializable {
     private int id;
@@ -13,6 +14,7 @@ public class Human implements Serializable {
     private Human mother, father;
     private List<Human> children;
     private Married married; // супружество
+    private LocalDate age =  LocalDate.now().minusDays(dateBirth.getYear());
 
     private static final int minParentAge = 17;
 
@@ -121,5 +123,9 @@ public class Human implements Serializable {
     @Override
     public String toString() {
         return getInfo();
+    }
+
+    public LocalDate getAge() {
+        return age;
     }
 }
